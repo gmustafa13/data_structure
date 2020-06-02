@@ -30,10 +30,11 @@ function mySet() {
     }
     // this method remove an element from array
     this.remove = function (element) {
-        if (this.has(element)) {
+        if (!this.has(element)) {
             let index = collection.indexOf(element)
             collection.splice(index, 1);
-            return true
+            return collection
+            // return true
         } else {
             return false
         }
@@ -121,5 +122,6 @@ let a = gulam.union(mustafa)
 let b = gulam.intersection(mustafa)
 let c = gulam.difference(mustafa)
 let d = gulam.subset(mustafa)
+let e = gulam.remove(2)
 
-console.log("union", a, b, c, d)
+console.log("union", a, b, c, d,e)
