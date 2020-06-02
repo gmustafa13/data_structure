@@ -70,13 +70,42 @@ function mySet() {
         }
         return _intersection.value();
     }
+
+    /**
+     * The difference of two sets, written A - B is the set of all elements of A that are not elements of B
+     */
+    this.difference = function (setB) {
+        let _difference = new mySet();
+        let firstSet = this.value();
+        for (let elem of firstSet) {
+            if (setB.has(elem)) {
+                _difference.add(elem)
+            }
+
+        }
+        return _difference.value();
+    }
+
+    /**
+     * when set b has all the element of set a then its called a is subset of b
+     */
+
+    this.subset = function (setB) {
+        let firstSet = this.value();
+        for (let elm of firstSet) {
+            if (setB.has(elm)) {
+                return false
+            }
+        }
+        return true
+    }
 }
 
 
 let gulam = new mySet();
 let mustafa = new mySet();
 
-gulam.add(1)
+gulam.add(7)
 gulam.add(2)
 gulam.add(4)
 gulam.add(2)
@@ -90,5 +119,7 @@ console.log("set a", gulam.value())
 console.log("set b", mustafa.value())
 let a = gulam.union(mustafa)
 let b = gulam.intersection(mustafa)
+let c = gulam.difference(mustafa)
+let d = gulam.subset(mustafa)
 
-console.log("union", a,b)
+console.log("union", a, b, c, d)
