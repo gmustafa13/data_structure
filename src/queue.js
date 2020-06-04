@@ -35,10 +35,10 @@ var queue = function () {
 
         let tempArry = [];
 
-        for (let i = 1; i <= collection.length - 1; i++) {
-            tempArry[i - 1] = collection[i]
+        for (let i = collection.length - 2; i >= 0; i--) {  //remove last index object
+            tempArry[i] = collection[i]
         }
-        collection = tempArry;
+        collection = tempArry; // update collection
         return collection
     }
 
