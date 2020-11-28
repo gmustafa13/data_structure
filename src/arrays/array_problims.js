@@ -62,3 +62,38 @@ async function splitAndSort(data) {
 //   }
 
 //   console.log(findPermutations('gulam'))
+/**
+ * validate brackets
+ */
+
+function brackets(str){
+  let stack = [];
+  let map = {
+      '(': ')',
+      '[': ']',
+      '{': '}'
+  }
+  for(let i =0; i< str.length ; i++){
+      if(str[i] == '(' || str[i] == '{' || str[i] == '['){
+          console.log("in if")
+          stack.push(str[i]);
+      }else if(str[i] == ')' || str[i] == '}' || str[i] == ']'){
+          console.log("in else")
+        let last =  stack.pop(str[i]); // if end brackets found pop from stack
+
+          // match pop element with map obj if found then its true else false
+         if(str[i] !== map[last]){
+             return false
+          }
+ 
+      }
+  }
+  // after looping if any element is left then its false else true
+
+  if(stack.length !== 0){
+      return false
+  }else{
+      return true
+  }
+}
+console.log("ggg",brackets('[(5+2)*(5+2)]'))
