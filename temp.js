@@ -1,43 +1,53 @@
-function gulam(str){
-    let openingStack = [];
-    let closingStack =[];
-    let copyOfString = ''
-    
-    let lastIndexOfOpening , firstIndexOfClosing;
-    for(let i =0; i< str.length ; i++){
-        let number = 0;
-        if(str[i] == '(' || str[i] == '{' || str[i] == '['){
-            lastIndexOfOpening = i;
-            openingStack.push(i)
-        }else if(str[i] == ')' || str[i] == '}' || str[i] == ']'){
 
-            firstIndexOfClosing = i
-            closingStack.push(i)
-            //[0,1,7] [5,11,12]
-            let data = str.substring(openingStack[openingStack.length-1]+1, closingStack[closingStack.length-1])
-            console.log("close",openingStack[openingStack.length-1],closingStack[closingStack.length-1], data)
-            console.log("openingStack",openingStack,closingStack,openingStack[openingStack.length-1],closingStack[closingStack.length-1]+1)
-            
-            for (let j = 1; j < data.split("").length-1; j++) {
-                number = parseFloat(data[0]);
-                if (data[j] === '+') {
-               number +=  parseFloat(data[j+1]);
-                } else if (data[j] === '-') {
-                    number -=  parseFloat(data[j+1]);
-                } else if (data[j] === '*') {
-                    number *=  parseFloat(data[j+1]);
-                } else if (data[j] === '/') {
-                    number /=  parseFloat(data[j+1]);
-                }
-            }
-            console.log("number",number)
-            let tempString = str.replace(str.substring(openingStack[openingStack.length-1], closingStack[closingStack.length-1]+1),number)
-            console.log("gggg",tempString)
-            openingStack.pop();
-            closingStack.pop();
-            
+let newCalculator = async (string) => {
+    let result;
+    if (string.includes("(")) {
+        let regex = /((?:\(([^(^)].*?)\))+)/
+        let match = regex.exec(string);
+        let withoutBracket = match[2];
+        let solvedBrackets = await arithmeticOperation(withoutBracket)
+        let startIndex = match.index;
+        let endIndex = match.index + match[0].length
+        string = string.replace(string.substring(startIndex, endIndex), solvedBrackets)
+        if (string.includes("(")) {
+            newCalculator(string)
+        } else {
+            result = await arithmeticOperation(string);
         }
+    } else {
+        result = await arithmeticOperation(string);
     }
     
+  }
+
+let arithmeticOperation = async (matchedData) => {
+    function solveSingle(arr){
+        arr = arr.slice();
+        while(arr.length-1){
+          if(arr[1] === '*') arr[0] = arr[0] * arr[2]
+          if(arr[1] === '-') arr[0] = arr[0] - arr[2]
+          if(arr[1] === '+') arr[0] = +arr[0] + (+arr[2])
+          if(arr[1] === '/') arr[0] = arr[0] / arr[2]
+          arr.splice(1,1);
+          arr.splice(1,1);
+        }
+        return arr[0];
+      }
+    let res = matchedData.split(/(\+|-)/g).map(x => x.trim().split(/(\*|\/)/g).map(a => a.trim()))
+    res = res.map(x => solveSingle(x))
+    let a = await solveSingle(res)
+    // let number = parseFloat(matchedData[0]);
+    // for (let i = 1; i < matchedData.length; i++) {
+    //     if (matchedData[i] === '+') {
+    //    number +=  parseFloat(matchedData[i+1]);
+    //     } else if (matchedData[i] === '-') {
+    //         number -=  parseFloat(matchedData[i+1]);
+    //     } else if (matchedData[i] === '*') {
+    //         number *=  parseFloat(matchedData[i+1]);
+    //     } else if (matchedData[i] === '/') {
+    //         number /=  parseFloat(matchedData[i+1]);
+    //     }
+    // }
+    return a
 }
-console.log("ggg",gulam('[(5+2)*(5+1)]'))
+newCalculator('2+5*(3-1*2)+(4+2)/2')
